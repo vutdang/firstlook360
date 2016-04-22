@@ -1,0 +1,44 @@
+-->
+<include url="skin/vtourskin_design_glass.xml" if="design === 'glass'"/>
+<include url="skin/vtourskin_design_flat.xml" if="design === 'flat'"/>
+<include url="skin/vtourskin_design_flat_light.xml" if="design === 'flat_light'"/>
+<include url="skin/vtourskin_design_ultra_light.xml" if="design === 'ultra_light'"/>
+<include url="skin/vtourskin_design_117.xml" if="design === '117'"/>
+
+
+<!--
+ startup action - here the first pano/scene will be loaded 
+-->
+<action name="startup" autorun="onstart"> 
+if(startscene === null, copy(startscene,scene[0].name)); loadscene(get(startscene), null, MERGE);
+</action>
+<!-- add photo here --> 
+<scene name="my_house" title="My House" onstart="" lat="49.2611738" lng="-123.2138352" heading="0.0">
+<view hlookat="-1" vlookat="11" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+<image>
+	<sphere url="my_house.jpg"/>
+</image>
+<!--  place your scene hotspots here  -->
+</scene>
+<scene name="inside_my_house" title="Inside My House" onstart="" lat="49.2608662" lng="-123.213681" heading="0.0">
+<view hlookat="0" vlookat="0" maxpixelzoom="1.0" fovmax="180" limitview="range" vlookatmin="-90" vlookatmax="90" />
+<image>
+	<sphere url="inside_my_house.jpg"/>
+</image>
+<!--  place your scene hotspots here  -->
+</scene>
+<scene name="kaiser" title="Kaiser" onstart="" lat="49.2621314" lng="-123.2504511" heading="0.0">
+<view hlookat="-1" vlookat="11" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+<image>
+	<sphere url="kaiser.jpg"/>
+</image>
+<!--  place your scene hotspots here  -->
+</scene>
+<scene name="wreck_beach" title="Wreck Beach" onstart="" lat="49.2634327" lng="-123.2592465" heading="0.0">
+<view hlookat="-1" vlookat="11" fovtype="MFOV" fov="120" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto"/>
+<image>
+	<sphere url="wreck_beach.jpg"/>
+</image>
+<!--  place your scene hotspots here  -->
+</scene>
+</krpano>

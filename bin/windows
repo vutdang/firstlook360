@@ -1,0 +1,14 @@
+::Take photo with ffmpeg
+C:\ffmpeg\bin\ffmpeg.exe -s 1280x720 -f dshow -i video="SMI" -f image2 -vframes 1 C:\ffmpeg\bin\photos\2.jpg
+
+::Take video ffmpeg
+C:\ffmpeg\bin\ffmpeg.exe -t 10 -s 1280x720 -f dshow -i video="SMI" -c:v libx264 -pix_fmt yuv420p -preset ultrafast -f mp4  C:\ffmpeg\bin\videos\1.mp4
+
+C:\ffmpeg\bin\ffmpeg.exe -list_devices true -f dshow -i dummy
+
+-i video="SMI"
+
+C:\ffmpeg\bin\ffmpeg.exe -s 1280x720 -f dshow -i video="SMI" -f image2 -vframes 1 C:\ffmpeg\bin\photos\1.jpg
+
+::Record video ffmpeg
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,l

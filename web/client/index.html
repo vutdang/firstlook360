@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Victim Locator #1</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=640" />
+  <style type="text/css">
+    .container {
+      margin-top: 10%;
+      text-align: center;
+    }
+
+    #canvas-video {
+      width: 640px;
+      height: 240px;
+      border: 1px solid #ccc;
+      position: relative;
+      top: 0px;
+    }
+
+    body {
+        background-color: black;
+    }
+
+    #slider {
+    -webkit-appearance: none;
+    position: relative;
+    left: 75px;
+    top: 10px;
+    width: 250px;
+    }
+
+    #slider::-webkit-slider-runnable-track {
+    height: 5px;
+    background: #666;
+    border: none;
+    border-radius: 0px;
+    }
+
+    #slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: goldenrod;
+    margin-top: -7px;
+    }
+
+    #slider:focus {
+    outline: none;
+    }
+
+    #slider:focus::-webkit-slider-runnable-track {
+    background: #666;
+    }
+
+    .button {
+      background-color: transparent;
+      border: 1px solid #666;
+      border-radius: 10px;
+      float: left;
+      color: #666;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      position: relative;
+      left: 0px;
+      top: 0px;
+      cursor: pointer;
+      box-shadow: 0 1px 0 #666, 0 2px 0 #444, 0 0px 0px;
+      outline: none;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+
+    .button:active {
+      background-color: transparent;
+      border: 1px solid #666;
+      border-radius: 10px;
+      float: left;
+      color: #666;
+      padding: 10px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      position: relative;
+      top: 1px;
+      cursor: pointer;
+      box-shadow: 0 0px 0 #666, 0 0px 0 #444, 0 0px 0px;
+      outline: none;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!--
+      The canvas size specified here is the "initial" internal resolution. jsmpeg will
+      change this internal resolution to whatever the source provides. The size the
+      canvas is displayed on the website is dictated by the CSS style.
+    -->
+    <canvas id="canvas-video" width="2560" height="720"></canvas>
+  </div>
+
+  <input id="slider" type="range" min="0" max="3" value="0" step="1" onchange="sliderChange(this.value)"/>
+
+  <button type="button" class="button" onmousedown="getLocation()">Take Pano!</button>
+  <button type="button" class="button" onmousedown="liveVid()">Live Video!</button>
+  <button type="button" class="button" onclick="location.href='/krpano.html';">View Pano!</button>
+
+  <script src="/jsmpg.js"></script>
+  <script type="text/javascript">
+    // CHANGE THIS TO THE APPROPRIATE WS ADDRESS
+    //var wsUrl = 'ws://edison.local:8084/';
+    //var wsUrl = 'ws://192.168.0.25:8084/'; //Wu-Tang_-AN
+    //var wsUrl = 'ws://192.168.49.180:8084/'; //Android Wifi Direct
+    var wsUrl = 'ws://206.87.155.166:8084/'; //secure 
+
+    // Show loading notice
+    var canvas = document.getElementById('canvas-video');
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#333';
+    ctx.fillText('Loading...', canvas.width/2-30, canvas.height/3);
+
+    // Start the player
+    var client = new WebSocket(wsUrl);
+    var player = new jsmpeg(client, { canvas:canvas });
+
+    // Send LED level
+    var sliderChange = window.sliderChange = function(sliderValue) {
+      var controlLED = {type: "LED", level: sliderValue}
+      console.log("Slider changed: " + controlLED.type);
+      client.send(JSON.stringify(controlLED));
+    };
+
+    // Send picture command
+    var takePano = window.takePano = function(position) {
+      var controlPIC = {type: "PIC", lat: position.coords.latitude, lon: position.coords.longitude}
+      console.log("Take Picture: ");
+      client.send(JSON.stringify(controlPIC));
+    };
+
+    // Send live video command
+    var liveVid = window.livevid = function() {
+      var controlVID = {type: "VID"}
+      console.log("Start Stream");
+      client.send(JSON.stringify(controlVID));
+    };
+
+    // Get GPS coordinates
+    function getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(takePano);
+      } else { 
+          x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    };
+  </script>
+
+</body>
+</html>
